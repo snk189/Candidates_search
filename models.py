@@ -1,5 +1,5 @@
-from pydantic import BaseModel
 from typing import List
+from pydantic import BaseModel
 
 class Candidate(BaseModel):
     name: str
@@ -8,3 +8,6 @@ class Candidate(BaseModel):
     password: str
     skills: List[str]
     quiz_score: int = 0
+
+class KeywordSearch(BaseModel):
+    keywords: List[str]
