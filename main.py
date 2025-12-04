@@ -2,59 +2,72 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
 import json
-from models import Candidate
+import os
 
 app = FastAPI()
 
 DATA_FILE = "data/candidates.json"
 
-class CandidateIn(BaseModel):
+class Candidate(BaseModel):
     name: str
     email: str
     phone: str
     password: str
     skills: List[str]
 
+class LoginData(BaseModel):
+    email: str
+    password: str
+
 class Keywords(BaseModel):
     keywords: List[str]
 
-def load_candidates():
-    with open(DATA_FILE, "r") as f:
-        return [Candidate(**cand) for cand in json.load(f)]
+# Helper to read candidates safely
+def read_candidates():
+    if not os.path.exists(DATA_FILE):
+        return []
+    try:
+        with open(DATA_FILE, "r") as f:
+            data = json.load(f)
+            if not isinstance(data, list):
+                return []
+            return data
+    except json.JSONDecodeError:
+        return []
 
-def save_candidates(candidates):
+# Helper to write candidates
+def write_candidates(candidates):
+    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
     with open(DATA_FILE, "w") as f:
-        json.dump([cand.dict() for cand in candidates], f, indent=4)
+        json.dump(candidates, f, indent=4)
 
 @app.post("/register")
-def register_candidate(candidate: CandidateIn):
-    candidates = load_candidates()
-    if any(c.email == candidate.email for c in candidates):
+def register(candidate: Candidate):
+    candidates = read_candidates()
+    if any(c["email"] == candidate.email for c in candidates):
         raise HTTPException(status_code=400, detail="Email already registered")
-    new_candidate = Candidate(**candidate.dict(), quiz_score=0)
-    candidates.append(new_candidate)
-    save_candidates(candidates)
+    c_dict = candidate.dict()
+    c_dict["quiz_score"] = 0  # always initialize to 0
+    candidates.append(c_dict)
+    write_candidates(candidates)
     return {"message": "Candidate registered successfully"}
 
 @app.post("/login")
-def login(email: str, password: str):
-    candidates = load_candidates()
+def login(data: LoginData):
+    candidates = read_candidates()
     for c in candidates:
-        if c.email == email and c.password == password:
-            return {"message": "Login successful", "candidate": c.dict()}
-    raise HTTPException(status_code=401, detail="Invalid credentials")
+        if c["email"] == data.email and c["password"] == data.password:
+            return {"message": "Login successful", "candidate": c}
+    raise HTTPException(status_code=401, detail="Invalid email or password")
 
 @app.post("/search_candidates")
 def search_candidates(keywords: Keywords):
-    candidates = load_candidates()
-    result = []
-
-    for cand in candidates:
-        match_count = len(set(cand.skills) & set(keywords.keywords))
+    candidates = read_candidates()
+    matched = []
+    for c in candidates:
+        match_count = sum(1 for k in keywords.keywords if k in c.get("skills", []))
         if match_count > 0:
-            result.append((match_count, cand.name.lower(), cand))  # add name for alphabetical sort
-
-    # Sort first by match_count descending, then name ascending
-    result.sort(key=lambda x: (-x[0], x[1]))
-
-    return {"matching_candidates": [cand[2].dict() for cand in result]}
+            matched.append((match_count, c["name"].lower(), c))
+    # Sort by number of matches descending, then alphabetically by name
+    matched.sort(key=lambda x: (-x[0], x[1]))
+    return {"matching_candidates": [c[2] for c in matched]}
