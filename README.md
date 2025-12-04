@@ -29,7 +29,7 @@ POST /register – Register candidate
 
 POST /search_candidates – Search by skills
 
-Notes
-Ensure data/candidates.json exists.
+Notes<br>
+Ensure data/candidates.json exists.<br>
 Frontend connects to FastAPI endpoints.
 
