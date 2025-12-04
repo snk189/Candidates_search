@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+    background: rgba(0,0,0,0.35);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
+    width: 400px;
+}
+
+h1 {
+    margin-bottom: 40px;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.btn {
+    text-decoration: none;
+    background: #ffda44;
+    color: black;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #ffd000;
+}
+
+#footer {
+    margin-top: 30px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+.btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: #ffda44;
+    color: black;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #ffd000;
+}
+#footer {
+    margin-top: 20px;
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #00fffc;
+    text-align: center;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cylon scanning animation */
+#footer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, #00fffc, transparent);
+    animation: cylon 2s infinite;
+}
+
+@keyframes cylon {
+    0% { left: -50%; }
+    50% { left: 100%; }
+    100% { left: -50%; }
+}
