@@ -1,17 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Candidate Search</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h2>Search Candidates by Skills</h2>
-<input type="text" id="skillsInput" placeholder="Enter skills (Java, React)">
-<button id="searchBtn">Search</button>
+<div class="container">
 
-<h3>Matching Candidates:</h3>
-<div id="results"></div>
+    <!-- Navigation Tabs -->
+    <nav>
+        <button class="active" onclick="openTab('searchTab')">Search</button>
+        <button onclick="openTab('aboutTab')">About</button>
+    </nav>
+
+    <!-- Search Section -->
+    <div id="searchTab" class="section" style="display: block;">
+        <h2>Candidate Search</h2>
+        <input type="text" id="skillsInput" placeholder="Enter skills (Java, React)">
+        <button id="searchBtn">Search</button>
+
+        <h3>Matching Candidates:</h3>
+        <div id="results"></div>
+    </div>
+
+    <!-- About Section -->
+    <div id="aboutTab" class="section">
+        <h2>About</h2>
+        <p>
+            This platform helps match job descriptions with potential candidates 
+            using skills-based filtering and smart ranking logic.
+        </p>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer">Built by S^4</div>
+
+</div>
 
 <script src="script.js"></script>
+<script>
+    function openTab(tabId) {
+        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).style.display = 'block';
+        event.target.classList.add('active');
+    }
+</script>
 </body>
 </html>
