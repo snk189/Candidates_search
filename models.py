@@ -1,13 +1,15 @@
-from typing import List
 from pydantic import BaseModel
+from typing import List, Optional
 
-class Candidate(BaseModel):
+class CandidateIn(BaseModel):
     name: str
     email: str
     phone: str
     password: str
     skills: List[str]
+
+class Candidate(CandidateIn):
     quiz_score: int = 0
 
-class KeywordSearch(BaseModel):
+class Keywords(BaseModel):
     keywords: List[str]
