@@ -20,7 +20,6 @@ python -m venv venv
 pip install fastapi uvicorn pydantic
 Run backend:
 
-bash
 Copy code
 uvicorn main:app --reload
 API docs: http://127.0.0.1:8000/docs
