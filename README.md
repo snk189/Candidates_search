@@ -1,35 +1,36 @@
-# Hackathon Project
+# Candidate Search Platform
+
+## Overview
+FastAPI backend + HTML/CSS frontend to register candidates and search by skills. Data is stored in `data/candidates.json`.
 
 ## Tech Stack
-- **Backend:** Python, FastAPI
-- **Frontend:** HTML, CSS, JavaScript (planned for later)
-- **Data Storage:** JSON file (`candidates.json`)
+- Backend: FastAPI, Python  
+- Frontend: HTML, CSS, JS  
+- Storage: JSON file  
 
-## Project Description
-A candidate registration and search system for companies. Candidates can register with their details and skills. Companies can search for candidates based on keywords and quiz them.
+## Features
+- Register candidates (name, email, phone, password, skills, quiz_score=0)  
+- Search candidates by skill keywords (case-insensitive, alphabetically sorted)  
+- Persistent storage in JSON  
 
-## Project Structure
-Hackathon_project/
-- backend/
-  - main.py
-  - models.py
-  - data/
-    - candidates.json
-  - venv/  (not uploaded)
+## Setup
+1. Create virtual env & install dependencies:
+python -m venv venv
+.\venv\Scripts\activate
+pip install fastapi uvicorn pydantic
+Run backend:
 
-## Key Features
-- Candidate registration
-- Candidate login
-- Search candidates by keywords
-- Store candidate details in JSON
+bash
+Copy code
+uvicorn main:app --reload
+API docs: http://127.0.0.1:8000/docs
 
-## How to Run Backend
-1. Clone the repository.
-2. Open backend folder.
-3. Activate virtual environment:
-   - `.\venv\Scripts\activate` (Windows PowerShell)
-4. Install dependencies:
-   - `pip install fastapi uvicorn`
-5. Run the server:
-   - `uvicorn main:app --reload`
-6. Open browser or use Swagger at `http://127.0.0.1:8000/docs`
+API Endpoints
+POST /register – Register candidate
+
+POST /search_candidates – Search by skills
+
+Notes
+Ensure data/candidates.json exists.
+Frontend connects to FastAPI endpoints.
+
